@@ -20,10 +20,8 @@ app.use(limiter);
 app.post('/getIssue', async (req, res) => {
   const { issueKey } = req.body;
   
-  // const email = 'skapu@zuora.com';
-  // const apiToken = 'ATATT3xFfGF0_zet5cP2kLVhKP17eaJy2u48Y2MySnNnebJezkF7-hWZe4nklKHG9iUvhWlEx3HU9W4ePJ-RsFQPl6R_43yzpl4OrSsMiGzboHs8dfmYtubS79tUByUrE6nSgy-OyG9LfukbkH9Oal-fmKlM6oca-V5r83x9t6AW4H0BbSUFrII=E1DA17D5';
-  const email = 'prodbot@zuora.com';
-  const apiToken = 'ATATT3xFfGF0zUGVI9UFT2EMrTzm-3wAsK_UwgAXjXtCrz1x753oGrB6tFKMMoex5y8FRu00FX6Lf1sLlghQ0KiAqgnROX3TnispY-VOMhsnxD1s2n7SrN8A-LuD6eE8xduB0hibJkRHJnZK57cbSLzzx_2CDYf88Arwaxb6hdOV3FZrKZ0BbpQ=1DAB4222';
+  const email = 'skapu@zuora.com';
+  const apiToken = 'ATATT3xFfGF0_zet5cP2kLVhKP17eaJy2u48Y2MySnNnebJezkF7-hWZe4nklKHG9iUvhWlEx3HU9W4ePJ-RsFQPl6R_43yzpl4OrSsMiGzboHs8dfmYtubS79tUByUrE6nSgy-OyG9LfukbkH9Oal-fmKlM6oca-V5r83x9t6AW4H0BbSUFrII=E1DA17D5';
   try {
     const response = await axios.get(`https://zuora-sandbox-383.atlassian.net/rest/api/3/issue/${issueKey}`, {
       headers: {
@@ -42,8 +40,8 @@ app.post('/getIssue', async (req, res) => {
 
 app.post('/addComment', async (req, res) => {
   const { issueKey , inputValue } = req.body;
-  const email = 'prodbot@zuora.com';
-  const apiToken = 'ATATT3xFfGF0zUGVI9UFT2EMrTzm-3wAsK_UwgAXjXtCrz1x753oGrB6tFKMMoex5y8FRu00FX6Lf1sLlghQ0KiAqgnROX3TnispY-VOMhsnxD1s2n7SrN8A-LuD6eE8xduB0hibJkRHJnZK57cbSLzzx_2CDYf88Arwaxb6hdOV3FZrKZ0BbpQ=1DAB4222';
+  const email = 'skapu@zuora.com';
+  const apiToken = 'ATATT3xFfGF0_zet5cP2kLVhKP17eaJy2u48Y2MySnNnebJezkF7-hWZe4nklKHG9iUvhWlEx3HU9W4ePJ-RsFQPl6R_43yzpl4OrSsMiGzboHs8dfmYtubS79tUByUrE6nSgy-OyG9LfukbkH9Oal-fmKlM6oca-V5r83x9t6AW4H0BbSUFrII=E1DA17D5';
   
   const bodyData = `{
     "body": {

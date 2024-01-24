@@ -1,18 +1,27 @@
 // server/app.js
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const axios = require('axios');
 const cors = require('cors');
 const app = express();
 const port = 5000;
 
+const limiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  message: 'Too many requests from this IP, please try again later.'
+});
+
+// Apply the rate limiter to all routes
 app.use(cors());
 app.use(express.json());
+app.use(limiter);
 
 app.post('/getIssue', async (req, res) => {
   const { issueKey } = req.body;
   
-  const email = 'prodbot@zuora.com';
-  const apiToken = 'ATATT3xFfGF0rg_PAfyDUTxhb3Jh3LcHi7qc4uayhFo65w3knvLLisJ4-0CzWgSgdjKJZx3M5BhxH_WIaFAmVPJbr4M1YIutJTfNni4qfHjJxag0Z5u9V65OFrOiQYDJ4N3WZlUmFGnoFeGAtToEcTa_oQOUm9sFNW7WHSnG7nnRZSwMsiRNoQM=8C1DBFAE';
+  const email = 'skapu@zuora.com';
+  const apiToken = 'ATATT3xFfGF0_zet5cP2kLVhKP17eaJy2u48Y2MySnNnebJezkF7-hWZe4nklKHG9iUvhWlEx3HU9W4ePJ-RsFQPl6R_43yzpl4OrSsMiGzboHs8dfmYtubS79tUByUrE6nSgy-OyG9LfukbkH9Oal-fmKlM6oca-V5r83x9t6AW4H0BbSUFrII=E1DA17D5';
   try {
     const response = await axios.get(`https://zuora-sandbox-383.atlassian.net/rest/api/3/issue/${issueKey}`, {
       headers: {
@@ -31,8 +40,8 @@ app.post('/getIssue', async (req, res) => {
 
 app.post('/addComment', async (req, res) => {
   const { issueKey , inputValue } = req.body;
-  const email = 'prodbot@zuora.com';
-  const apiToken = 'ATATT3xFfGF0rg_PAfyDUTxhb3Jh3LcHi7qc4uayhFo65w3knvLLisJ4-0CzWgSgdjKJZx3M5BhxH_WIaFAmVPJbr4M1YIutJTfNni4qfHjJxag0Z5u9V65OFrOiQYDJ4N3WZlUmFGnoFeGAtToEcTa_oQOUm9sFNW7WHSnG7nnRZSwMsiRNoQM=8C1DBFAE';
+  const email = 'skapu@zuora.com';
+  const apiToken = 'ATATT3xFfGF0_zet5cP2kLVhKP17eaJy2u48Y2MySnNnebJezkF7-hWZe4nklKHG9iUvhWlEx3HU9W4ePJ-RsFQPl6R_43yzpl4OrSsMiGzboHs8dfmYtubS79tUByUrE6nSgy-OyG9LfukbkH9Oal-fmKlM6oca-V5r83x9t6AW4H0BbSUFrII=E1DA17D5';
   
   const bodyData = `{
     "body": {

@@ -1,11 +1,18 @@
 import React from 'react';
 
-const CommentList = ({ comments }) => {
+const CommentList = ({ comments , convertRichToPlainText }) => {
   // const [hoveredAuthor, setHoveredAuthor] = useState(null);
 
   // const handleAuthorHover = (author) => {
   //   setHoveredAuthor(author);
   // };
+
+  const getTextAreaHeight = (value) => {
+    const numberOfLines = value.split('\n').length;
+    const minHeight = 30;
+    const height = Math.max(minHeight, numberOfLines * 20);
+    return `${height}px`;
+  };
 
   return (
     <div className="comment-list">
@@ -19,7 +26,15 @@ const CommentList = ({ comments }) => {
           <img className="avatar" src={comment.author.avatarUrls['32x32']} alt="Avatar" />
           <div className="comment-details">
             <div className="author-name">{comment.author.displayName}</div>
-            <div className="comment-text">{comment.body.content[0].content[0].text}</div>
+            <textarea
+              style={{
+                height: getTextAreaHeight(convertRichToPlainText(comment.body)),
+                backgroundColor: '#c3dcd6',
+                border: 'none', 
+              }}
+              value={convertRichToPlainText(comment.body)}
+              readOnly
+            />
           </div>
         </div>
       ))}

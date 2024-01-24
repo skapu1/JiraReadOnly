@@ -10,6 +10,14 @@ const ReadOnlyField = ({ label, value }) => (
   </div>
 );
 
+// Component to render a read-only text field
+const UserPickerField = ({ label, value }) => (
+  <div className="field">
+    <label style={{ display: 'block' }}>{label}</label>
+    <input type="text" value={value?value.displayName:"Empty"} readOnly />
+  </div>
+);
+
 // Component to render a read-only Dropdown field
 const DropDownField = ({ label, value }) => (
   <div className="field">
@@ -39,7 +47,7 @@ const RichText = ({ label, value }) => {
   return (
     <div className="field">
       <label style={{ display: 'block' }}>{label}</label>
-      <textarea style={{ height: getTextAreaHeight(convertDescriptionToPlainText(value)) }} value={value?convertDescriptionToPlainText(value):"Empty"} readOnly />
+      <textarea style={{ height: getTextAreaHeight(convertRichToPlainText(value)) }} value={value?convertRichToPlainText(value):"Empty"} readOnly />
     </div>
   );
 };
@@ -60,18 +68,31 @@ const multiTotext = (value) => {
   return items;
 }
 
-function convertDescriptionToPlainText(descriptionData) {
+function convertRichToPlainText(descriptionData) {
   if (descriptionData) {
     const descriptionContent = descriptionData.content;
 
     const plainText = descriptionContent.map((contentItem) => {
       if (contentItem.type === 'paragraph') {
         return contentItem.content
-          .map((textItem) => textItem.text)
+          .map((textItem) => {
+            if(textItem.type === "mention"){
+              return textItem.attrs.text;
+            } else if (textItem.type === "text"){
+              return textItem.text
+            } else if (textItem.type === "hardBreak"){
+              return '\n'
+            }
+            return ''; 
+          })
           .join(' '); 
       } else if (contentItem.type === 'bulletList') {
         return contentItem.content
-          .map((listItem) => '•' + listItem.content[0].content[0].text)
+          .map((listItem) => '•' + convertRichToPlainText(listItem))//listItem.content[0].content[0].text)
+          .join('\n'); 
+      } else if (contentItem.type === 'orderedList') {
+        return contentItem.content
+          .map((listItem, index) => (index+1) + ") " + convertRichToPlainText(listItem))//listItem.content[0].content[0].text)
           .join('\n'); 
       }
       return ''; 
@@ -93,8 +114,8 @@ const JiraIssuePanel = ({issueData, handleAddComment}) => {
         <ReadOnlyField label="Status" value={issueData.fields.status.name} />
         <ReadOnlyField label="Summary" value={issueData.fields.summary} />
         <RichText label="Description" value={issueData.fields.description} />
-        <ReadOnlyField label="Assignee" value={issueData.fields.assignee.displayName} />
-        <ReadOnlyField label="Reporter" value={issueData.fields.reporter.displayName} />
+        <UserPickerField label="Assignee" value={issueData.fields.assignee} />
+        <UserPickerField label="Reporter" value={issueData.fields.reporter} />
         <DropDownField label="Completion Sprint" value={issueData.fields.customfield_10669} />
         <ReadOnlyField label="Resolved Date" value={issueData.fields.resolutiondate} />
         <MultiDropDownField label="Fix Version" value={issueData.fields.fixVersions} />
@@ -103,7 +124,7 @@ const JiraIssuePanel = ({issueData, handleAddComment}) => {
         <div className="field">
           <label> Comments </label>
         </div>
-        <CommentList comments={issueData.fields.comment.comments}/>
+        <CommentList comments={issueData.fields.comment.comments} convertRichToPlainText={convertRichToPlainText}/>
       </div>
       <CommentBox
         handleAddComment={handleAddComment}

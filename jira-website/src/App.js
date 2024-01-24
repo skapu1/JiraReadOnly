@@ -18,7 +18,12 @@ function App() {
       });
       const data = await response.json();
       console.log(data);
-      setIssueData(data);
+      if("error" in data){
+        alert("There is No issue present with this issue key");
+      }
+      else{
+        setIssueData(data);
+      }
     } catch (error) {
       console.error(error);
     }
